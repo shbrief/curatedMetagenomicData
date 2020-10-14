@@ -1,5 +1,5 @@
 metadata_cols <- function(metadata_tsv) {
-    template_csv <- read_csv("./inst/extdata/template.csv")
+    template_csv <- read_csv(paste0(cmg_extdata_dir(), "/template.csv"))
     read_lines(metadata_tsv, n_max = 1) %>%
     strsplit("\t") %>%
     unlist() %>%

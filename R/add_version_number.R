@@ -3,10 +3,10 @@ add_version_number <- function() {
         Sys.Date() %>%
         gsub("-", "", .)
 
-    dir("./uploads") %>%
+    dir(uploads_dir()) %>%
         for(i in .) {
-            paste0("./uploads/", i) %>% {
-                file.rename(., paste0("./uploads/", current_date, ".", i))
+            paste0(uploads_dir(), i) %>% {
+                file.rename(., paste0(uploads_dir(), current_date, ".", i))
             }
         }
 

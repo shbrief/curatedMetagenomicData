@@ -1,3 +1,16 @@
+# curatedMetagenomicData 1.19.4
+
+* move functions from data-raw into R
+* add folder-selecting functions and parameters to eliminate assumption
+of writing within the package source folders
+
+the software seems to be
+
+[1] "cmdValidVersions"           "combined_metadata"         
+[3] "curatedMetagenomicData"     "ExpressionSet2MRexperiment"
+[5] "ExpressionSet2phyloseq"     "getMetaphlanTree"          
+[7] "mergeData"   
+
 # curatedMetagenomicData 1.16.0
 
 * curatedMetagenomicData now contains 10,199 samples from 57 studies
