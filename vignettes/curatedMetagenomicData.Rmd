@@ -197,15 +197,13 @@ The `counts` and `rownames` arguments apply to `returnSamples()` as well, and ca
 To demonstrate the utility of `r Biocpkg("curatedMetagenomicData")`, an example analysis is presented below. However, readers should know analysis is generally beyond the scope of `r Biocpkg("curatedMetagenomicData")` and the analysis presented here is for demonstration alone. It is best to consider the output of `r Biocpkg("curatedMetagenomicData")` as the input of analysis more than anything else.
 
 ## Load R packages
-```{r}
-suppressPackageStartupMessages({
-    library(OmicsMLRepoR)
-    library(mia)
-    library(scater)
-    library(vegan)
-    library(stringr)
-    library(lefser)
-})
+```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
+library(OmicsMLRepoR)
+library(mia)
+library(scater)
+library(vegan)
+library(stringr)
+library(lefser)
 ```
 
 ## Retrieve harmonized metadata 
@@ -224,11 +222,11 @@ In this example, we will examine the association between current smoking status 
 First, as above, we use the `returnSamples()` function to return the relevant samples across all studies available in `r Biocpkg("curatedMetagenomicData")`. We want healthy adults, whose smoking history is known, and only fecal samples. The `select(where...` line below removes metadata columns which are all `NA` values – they exist in another study but are all `NA` once subsetting has been done. 
 
 ```{r}
-smoke <- cmd %>% 
-    filter(disease == "Healthy") %>% 
-    filter(age_group == "Adult") %>%
-    filter(!is.na(smoker)) %>%
-    filter(body_site == "feces") %>%
+smoke <- cmd |> 
+    filter(disease == "Healthy") |> 
+    filter(age_group == "Adult") |>
+    filter(!is.na(smoker)) |>
+    filter(body_site == "feces") |>
     select(where(~ !all(is.na(.x))))  # remove metadata columns which are all `NA` values
 ```
 
@@ -276,12 +274,12 @@ using the `addAlpha()` function from the `r Biocpkg("mia")` package.
 
 ```{r fig.cap = "Alpha Diversity - Shannon Index (H')"}
 ## Adding Shannon diversity values to colData
-smoke_shannon <- smoke_tse_genus %>%
+smoke_shannon <- smoke_tse_genus |>
   addAlpha(assay.type = "relative_abundance", index = "shannon_diversity")
 
 ## Violin plots
 title <- "Alpha Diversity by Smoking Status"
-smoke_shannon %>% 
+smoke_shannon |> 
     plotColData(x = "smoker_bin", y = "shannon_diversity", colour_by = "smoker_bin", shape_by = "smoker_bin") +
     labs(x = "Smoking Status", y = "Alpha Diversity (H')") + 
     guides(colour = guide_legend(title = "Smoking Status"), shape = guide_legend(title = title)) +
@@ -316,8 +314,8 @@ used along with `r CRANpkg("ggplot2")` syntax.
 
 ```{r fig.cap = "Beta Diversity – Bray–Curtis PCoA"}
 smoke_tse %>% 
-  agglomerateByRanks() %>%
-    runMDS(FUN = vegdist, method = "bray", exprs_values = "relative_abundance", altexp = "genus", name = "BrayCurtis") %>%
+  agglomerateByRanks() |>
+    runMDS(FUN = vegdist, method = "bray", exprs_values = "relative_abundance", altexp = "genus", name = "BrayCurtis") |>
     plotReducedDim("BrayCurtis", colour_by = "smoker_bin", shape_by = "smoker_bin") +
     labs(x = "PCo 1", y = "PCo 2") +
     guides(colour = guide_legend(title = "Smoking Status"), shape = guide_legend(title = "Smoking Status")) +
@@ -336,8 +334,8 @@ function from the `r Biocpkg("scater")` package is used along with
 
 ```{r}
 smoke_tse %>%
-  agglomerateByRanks() %>%
-    runUMAP(exprs_values = "relative_abundance", altexp = "genus", name = "UMAP") %>%
+  agglomerateByRanks() |>
+    runUMAP(exprs_values = "relative_abundance", altexp = "genus", name = "UMAP") |>
     plotReducedDim("UMAP", colour_by = "smoker_bin", shape_by = "smoker_bin") +
     labs(x = "UMAP 1", y = "UMAP 2") +
     guides(colour = guide_legend(title = "Smoking Status"), shape = guide_legend(title = "Smoking Status")) +
